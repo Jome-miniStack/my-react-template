@@ -1,13 +1,13 @@
-## install
+## install detail
 
 ### step-0 prettier
 
 > ref: https://github.com/tailwindlabs/prettier-plugin-tailwindcss
-
 ```
 pnpm install -D prettier prettier-plugin-tailwindcss
-
-.prettierrc
+```
+```
+// .prettierrc 
 {
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindStylesheet": "./src/index.css",
@@ -16,24 +16,23 @@ pnpm install -D prettier prettier-plugin-tailwindcss
   "trailingComma": "all",
   "arrowParens": "avoid"
 }
-
-vscode settings
-
+```
+```
+// vscode settings
   "editor.tabSize": 2,
   "[typescriptreact]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
       "editor.formatOnSave": true
-
   },
   "[typescript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
       "editor.formatOnSave": true
   },
+```
 
-
-mannual format
+mannually format
+```
 npx prettier --write .
-
 ```
 
 ### step-1 shadcn&tailwind
@@ -42,12 +41,13 @@ npx prettier --write .
 
 ```
 pnpm add tailwindcss @tailwindcss/vite
-
-replace all content
-src/index.css
+pnpm add -D @types/node
+```
+```
+// src/index.css
 @import "tailwindcss";
 
-tsconfig.app.json and tsconfig.json
+// tsconfig.app.json & tsconfig.json
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -55,9 +55,7 @@ tsconfig.app.json and tsconfig.json
     }
   }
 
-pnpm add -D @types/node
-
-vite.config.ts
+// vite.config.ts
 import path from "path"
 import tailwindcss from "@tailwindcss/vite"
 
@@ -67,22 +65,25 @@ import tailwindcss from "@tailwindcss/vite"
       "@": path.resolve(__dirname, "./src"),
     },
   },
-
+```
+shadcn init 
+```
 pnpm dlx shadcn@latest init
 
-test it
+// test: add button
 pnpm dlx shadcn@latest add button
 ```
 
-### step#2 tanstack/router
-
+### step-2 tanstack/router
 > ref: https://tanstack.com/router/latest/docs/framework/react/installation
 
 ```
 pnpm add @tanstack/react-router
 pnpm add -D @tanstack/router-plugin @tanstack/react-router-devtools
+```
 
-vite.config.ts
+```
+// vite.config.ts
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
@@ -91,16 +92,15 @@ export default defineConfig({
     react(),
     // ...,
   ],
+```
 
-** run pnpm dev to generate files
-Create the following files:
-src/routes/__root.tsx (with two '_' characters)
-src/routes/index.tsx
+run pnpm dev to generate files
+```
+pnpm dev
+```
 
-
-
-main.tsx
-
+```
+// main.tsx
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
@@ -119,7 +119,6 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
 }
-
 // Render the app
 const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
@@ -130,8 +129,13 @@ if (!rootElement.innerHTML) {
     </StrictMode>,
   )
 }
+```
+example pages, Create the following files:
+```
+src/routes/__root.tsx (with two '_' characters)
+src/routes/index.tsx
 
-__root.tsx
+// src/routes/__root.tsx
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
@@ -147,7 +151,7 @@ export const Route = createRootRoute({
   ),
 });
 
-index.tsx
+// src/routes/index.tsx
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/')({
@@ -161,5 +165,5 @@ function Index() {
     </div>
   )
 }
-
 ```
+ 
