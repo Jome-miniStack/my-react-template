@@ -166,4 +166,10 @@ function Index() {
   )
 }
 ```
- 
+
+### step-3 zustand & axios
+>ref: https://zustand.docs.pmnd.rs/getting-started/introduction
+
+```
+pnpm add zustand axios
+```
