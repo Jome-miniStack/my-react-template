@@ -1,54 +1,165 @@
-# React + TypeScript + Vite
+## install
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### step-0 prettier
 
-Currently, two official plugins are available:
+> ref: https://github.com/tailwindlabs/prettier-plugin-tailwindcss
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```
+pnpm install -D prettier prettier-plugin-tailwindcss
 
-## Expanding the ESLint configuration
+.prettierrc
+{
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/index.css",
+  "singleQuote": true,
+  "semi": true,
+  "trailingComma": "all",
+  "arrowParens": "avoid"
+}
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+vscode settings
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
+  "editor.tabSize": 2,
+  "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true
+
   },
-})
+  "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true
+  },
+
+
+mannual format
+npx prettier --write .
+
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### step-1 shadcn&tailwind
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+> ref: https://ui.shadcn.com/docs/installation/vite
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
+```
+pnpm add tailwindcss @tailwindcss/vite
+
+replace all content
+src/index.css
+@import "tailwindcss";
+
+tsconfig.app.json and tsconfig.json
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+
+pnpm add -D @types/node
+
+vite.config.ts
+import path from "path"
+import tailwindcss from "@tailwindcss/vite"
+
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
   },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
+
+pnpm dlx shadcn@latest init
+
+test it
+pnpm dlx shadcn@latest add button
+```
+
+### step#2 tanstack/router
+
+> ref: https://tanstack.com/router/latest/docs/framework/react/installation
+
+```
+pnpm add @tanstack/react-router
+pnpm add -D @tanstack/router-plugin @tanstack/react-router-devtools
+
+vite.config.ts
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+
+export default defineConfig({
+  plugins: [
+    TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
+    react(),
+    // ...,
+  ],
+
+** run pnpm dev to generate files
+Create the following files:
+src/routes/__root.tsx (with two '_' characters)
+src/routes/index.tsx
+
+
+
+main.tsx
+
+import { StrictMode } from 'react'
+import ReactDOM from 'react-dom/client'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
+// for tailwind
+import '@/index.css'
+
+// Import the generated route tree
+import { routeTree } from './routeTree.gen'
+
+// Create a new router instance
+const router = createRouter({ routeTree })
+
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
+
+// Render the app
+const rootElement = document.getElementById('root')!
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement)
+  root.render(
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>,
+  )
+}
+
+__root.tsx
+import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+
+export const Route = createRootRoute({
+  component: () => (
+    <>
+      <Link to="/" className="bg-green-500">
+        Home
+      </Link>
+      <Outlet />
+      <TanStackRouterDevtools />
+    </>
+  ),
+});
+
+index.tsx
+import { createLazyFileRoute } from '@tanstack/react-router'
+
+export const Route = createLazyFileRoute('/')({
+  component: Index,
 })
+
+function Index() {
+  return (
+    <div className="p-2">
+      <h3>Welcome Home!</h3>
+    </div>
+  )
+}
+
 ```
