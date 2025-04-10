@@ -1,17 +1,21 @@
 # React Vite Template
+🚧 **This template is still in progress**
 
-A modern starter template using:
-
+My custom starter template using:
 - ⚛️ React + Vite + TypeScript
 - 💨 TailwindCSS + ShadCN UI
 - 🧭 TanStack Router
 - ⚡ Axios + Zustand for API and state management
 - 🧹 Prettier + Tailwind CSS formatting plugin
-
 ---
+
+> React + Vite + TypeScript + TailwindCSS + TanStack Router + Zustand + Axios
+> **Node:** `>=18`  
+> **Package Manager:** `pnpm`
 
 ```bash
 pnpm install
+pnpm dev
 ```
 
 ## 📦 Installation Detail
