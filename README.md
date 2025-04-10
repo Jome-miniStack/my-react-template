@@ -1,13 +1,31 @@
-## install detail
+# React Vite Template
 
-### step-0 prettier
+A modern starter template using:
 
-> ref: https://github.com/tailwindlabs/prettier-plugin-tailwindcss
+- ⚛️ React + Vite + TypeScript
+- 💨 TailwindCSS + ShadCN UI
+- 🧭 TanStack Router
+- ⚡ Axios + Zustand for API and state management
+- 🧹 Prettier + Tailwind CSS formatting plugin
+
+---
+
+```bash
+pnpm install
 ```
+
+## 📦 Installation Detail
+
+
+### Step 0: Prettier Setup
+
+> [Tailwind Prettier Plugin](!https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
+
+```bash
 pnpm install -D prettier prettier-plugin-tailwindcss
 ```
-```
-// .prettierrc 
+`.prettierrc`
+```json
 {
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindStylesheet": "./src/index.css",
@@ -17,73 +35,78 @@ pnpm install -D prettier prettier-plugin-tailwindcss
   "arrowParens": "avoid"
 }
 ```
-```
-// vscode settings
+`.vscode/settings.json (optional):`
+```json
+{
   "editor.tabSize": 2,
   "[typescriptreact]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-      "editor.formatOnSave": true
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
   "[typescript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-      "editor.formatOnSave": true
-  },
-```
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
+}
 
-mannually format
 ```
+Manually format all files:
+```bash
 npx prettier --write .
 ```
 
-### step-1 shadcn&tailwind
+### Step 1: TailwindCSS + ShadCN Setup
+>[ShadCN Doc](!https://ui.shadcn.com/docs/installation/vite)
 
-> ref: https://ui.shadcn.com/docs/installation/vite
 
-```
+```bash
 pnpm add tailwindcss @tailwindcss/vite
 pnpm add -D @types/node
 ```
+`src/index.css`
 ```
-// src/index.css
 @import "tailwindcss";
-
-// tsconfig.app.json & tsconfig.json
+```
+`tsconfig.app.json / tsconfig.json`
+```json
+{
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   }
-
-// vite.config.ts
+}
+```
+`vite.config.ts`
+```ts
 import path from "path"
 import tailwindcss from "@tailwindcss/vite"
 
-  plugins: [react(), tailwindcss()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+plugins: [react(), tailwindcss()],
+resolve: {
+  alias: {
+    "@": path.resolve(__dirname, "./src"),
   },
+},
 ```
-shadcn init 
-```
+**Init ShadCN** 
+```bash
 pnpm dlx shadcn@latest init
 
-// test: add button
+# Add a test componet
 pnpm dlx shadcn@latest add button
 ```
 
-### step-2 tanstack/router
-> ref: https://tanstack.com/router/latest/docs/framework/react/installation
+### Step 2: TanStack Router Setup
+>[TanStack Router Guide](!https://tanstack.com/router/latest/docs/framework/react/installation)
 
-```
+```bash
 pnpm add @tanstack/react-router
 pnpm add -D @tanstack/router-plugin @tanstack/react-router-devtools
 ```
-
+`vite.config.ts`
 ```
-// vite.config.ts
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
@@ -94,13 +117,12 @@ export default defineConfig({
   ],
 ```
 
-run pnpm dev to generate files
-```
+**Start dev server to auto-generate route files**
+```bash
 pnpm dev
 ```
-
+**Main App Entry(`main.tsx`)**
 ```
-// main.tsx
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
@@ -130,12 +152,13 @@ if (!rootElement.innerHTML) {
   )
 }
 ```
-example pages, Create the following files:
-```
-src/routes/__root.tsx (with two '_' characters)
-src/routes/index.tsx
 
-// src/routes/__root.tsx
+**Need the file: `src/routes/__root.tsx`**
+
+**Example Routes**
+
+`src/routes/__root.tsx`
+```tsx
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
@@ -150,8 +173,9 @@ export const Route = createRootRoute({
     </>
   ),
 });
-
-// src/routes/index.tsx
+```
+`src/routes/index.tsx`
+```tsx
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/')({
@@ -167,9 +191,9 @@ function Index() {
 }
 ```
 
-### step-3 zustand & axios
->ref: https://zustand.docs.pmnd.rs/getting-started/introduction
-
+###  Step 3: Zustand + Axios Setup
+>[Zustand Docs](!https://zustand.docs.pmnd.rs/getting-started/introduction)
+>[Axios Docs](!https://axios-http.com/docs/intro)
 ```
 pnpm add zustand axios
 ```
