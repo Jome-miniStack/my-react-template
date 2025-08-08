@@ -1,28 +1,26 @@
-import { StrictMode } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-import '@/index.css'
+// 导入路由树
+import { routeTree } from './routeTree.gen' // TanStack CLI 会自动生成这个文件
 
-// Import the generated route tree
-import { routeTree } from './routeTree.gen'
-
-// Create a new router instance
+// 创建路由实例
 const router = createRouter({ routeTree })
 
-// Register the router instance for type safety
+// 注册路由实例以实现类型安全
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
 }
 
-// Render the app
 const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
-    <StrictMode>
+    <React.StrictMode>
+      {/* 在这里可以包裹其他全局 Provider, 例如 React Query */}
       <RouterProvider router={router} />
-    </StrictMode>,
+    </React.StrictMode>,
   )
 }
